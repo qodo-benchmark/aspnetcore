@@ -46,14 +46,9 @@ public class DisplayName<TValue> : IComponent
         if (For != _previousFieldAccessor)
         {
             var newDisplayName = ExpressionMemberAccessor.GetDisplayName(For);
-
-            if (newDisplayName != _displayName)
-            {
-                _displayName = newDisplayName;
-                _renderHandle.Render(BuildRenderTree);
-            }
-
+            _displayName = newDisplayName;
             _previousFieldAccessor = For;
+            _renderHandle.Render(BuildRenderTree);
         }
 
         return Task.CompletedTask;
