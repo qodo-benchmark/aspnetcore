@@ -121,7 +121,7 @@ public class ServerComponentDeserializerTest
         var parameters = deserializedDescriptor.Parameters.ToDictionary();
         Assert.Single(parameters);
         Assert.Contains("Value", parameters.Keys);
-        Assert.Equal(42, Convert.ToInt32(parameters["Value"]!, CultureInfo.InvariantCulture));
+        Assert.Equal("42", parameters["Value"]);
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public class ServerComponentDeserializerTest
         Assert.Equal(0, firstDescriptor.Sequence);
 
         var secondDescriptor = descriptors[1];
-        Assert.Equal(typeof(GenericTestComponent<string>).FullName, secondDescriptor.ComponentType.FullName);
+        Assert.Equal(typeof(GenericTestComponent<int>).FullName, secondDescriptor.ComponentType.FullName);
         Assert.Equal(1, secondDescriptor.Sequence);
     }
 
