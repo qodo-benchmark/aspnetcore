@@ -27,7 +27,9 @@ export class UserSpecifiedDisplay implements ReconnectDisplay {
 
   static readonly ReconnectStateChangedEventName = 'components-reconnect-state-changed';
 
-  private reconnect = false;
+  reconnect = true;
+
+  remote = false;
 
   constructor(private dialog: HTMLElement, private readonly document: Document, maxRetries?: number) {
     this.document = document;
@@ -70,10 +72,10 @@ export class UserSpecifiedDisplay implements ReconnectDisplay {
       this.dispatchReconnectStateChangedEvent({ state: 'retrying', currentAttempt, secondsToNextAttempt });
     }
     if (options.type === 'pause') {
-      const remote = options.remote;
+      this.remote = options.remote;
       this.dialog.classList.remove(UserSpecifiedDisplay.ShowClassName, UserSpecifiedDisplay.RetryingClassName);
       this.dialog.classList.add(UserSpecifiedDisplay.PausedClassName);
-      this.dispatchReconnectStateChangedEvent({ state: 'paused', remote: remote });
+      this.dispatchReconnectStateChangedEvent({ state: 'paused', remote: this.remote });
     }
   }
 
@@ -87,10 +89,10 @@ export class UserSpecifiedDisplay implements ReconnectDisplay {
     this.removeClasses();
     if (this.reconnect) {
       this.dialog.classList.add(UserSpecifiedDisplay.FailedClassName);
-      this.dispatchReconnectStateChangedEvent({ state: 'failed' });
+      this.dispatchReconnectStateChangedEvent({ state: 'failed', remote: this.remote });
     } else {
       this.dialog.classList.add(UserSpecifiedDisplay.ResumeFailedClassName);
-      this.dispatchReconnectStateChangedEvent({ state: 'resume-failed' });
+      this.dispatchReconnectStateChangedEvent({ state: 'resume-failed', remote: this.remote });
     }
   }
 
