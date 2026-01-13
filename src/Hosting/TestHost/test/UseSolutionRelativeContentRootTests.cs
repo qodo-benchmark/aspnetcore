@@ -113,7 +113,7 @@ public class UseSolutionRelativeContentRootTests : IDisposable
             .UseTestServer()
             .Configure(app => { });
 
-        builder.UseSolutionRelativeContentRoot("sub", _contentDirectory, ["*.sln", "*.slnx"]);
+        builder.UseSolutionRelativeContentRoot("sub", _contentDirectory, ["*.slnx", "*.sln"]);
 
         using var host = builder.Build();
         var environment = host.Services.GetRequiredService<IWebHostEnvironment>();
