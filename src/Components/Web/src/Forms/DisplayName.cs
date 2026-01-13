@@ -45,15 +45,12 @@ public class DisplayName<TValue> : IComponent
         // Only recalculate if the expression changed
         if (For != _previousFieldAccessor)
         {
+            _previousFieldAccessor = For;
+
             var newDisplayName = ExpressionMemberAccessor.GetDisplayName(For);
 
-            if (newDisplayName != _displayName)
-            {
-                _displayName = newDisplayName;
-                _renderHandle.Render(BuildRenderTree);
-            }
-
-            _previousFieldAccessor = For;
+            _displayName = newDisplayName;
+            _renderHandle.Render(BuildRenderTree);
         }
 
         return Task.CompletedTask;
