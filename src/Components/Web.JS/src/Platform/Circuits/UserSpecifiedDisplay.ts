@@ -89,7 +89,7 @@ export class UserSpecifiedDisplay implements ReconnectDisplay {
     this.removeClasses();
     if (this.reconnect) {
       this.dialog.classList.add(UserSpecifiedDisplay.FailedClassName);
-      this.dispatchReconnectStateChangedEvent({ state: 'failed' });
+      this.dispatchReconnectStateChangedEvent({ state: 'failed', remote: this.remote });
     } else {
       this.dialog.classList.add(UserSpecifiedDisplay.ResumeFailedClassName);
       this.dispatchReconnectStateChangedEvent({ state: 'resume-failed', remote: this.remote });
