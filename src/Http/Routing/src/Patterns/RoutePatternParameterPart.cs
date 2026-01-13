@@ -106,7 +106,7 @@ internal sealed class RoutePatternParameterPart : RoutePatternPart
             else if (constraint.ParameterPolicy is Constraints.RegexRouteConstraint regexConstraint)
             {
                 builder.Append("regex(");
-                builder.Append(regexConstraint.Constraint);
+                builder.Append(regexConstraint.Constraint.ToString());
                 builder.Append(')');
             }
             else if (constraint.ParameterPolicy is not null)

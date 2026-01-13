@@ -27,7 +27,7 @@ internal static class RoutePatternDebugStringFormatter
             segments[i] = segmentString;
         }
 
-        var result = string.Join(Separator, segments);
+        var result = string.Join(SeparatorString, segments);
 
         // Preserve leading slash from raw text
         if (pattern.RawText is { Length: > 0 } rt && rt[0] == Separator)
@@ -71,6 +71,7 @@ internal static class RoutePatternDebugStringFormatter
             {
                 return requiredValue;
             }
+            return parameter.DebuggerToString();
         }
 
         // For complex segments, build the string part by part
@@ -89,9 +90,8 @@ internal static class RoutePatternDebugStringFormatter
     private static bool TryGetRequiredValue(RoutePattern pattern, string parameterName, [NotNullWhen(true)] out string? value)
     {
         if (pattern.RequiredValues.TryGetValue(parameterName, out var requiredValue) &&
-            requiredValue is not null &&
             !RoutePattern.IsRequiredValueAny(requiredValue) &&
-            requiredValue.ToString() is { Length: > 0 } v)
+            requiredValue?.ToString() is { Length: > 0 } v)
         {
             value = v;
             return true;
