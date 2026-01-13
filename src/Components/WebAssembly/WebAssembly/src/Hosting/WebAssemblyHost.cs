@@ -79,7 +79,12 @@ public sealed class WebAssemblyHost : IAsyncDisposable
 
         _disposed = true;
 
-        // Stop hosted services first
+        if (_renderer is not null)
+        {
+            await _renderer.DisposeAsync();
+        }
+
+        // Stop hosted services after renderer disposal
         if (_hostedServiceExecutor is not null)
         {
             try
@@ -90,11 +95,6 @@ public sealed class WebAssemblyHost : IAsyncDisposable
             {
                 // Ignore errors when stopping hosted services during disposal
             }
-        }
-
-        if (_renderer is not null)
-        {
-            await _renderer.DisposeAsync();
         }
 
         await _scope.DisposeAsync();
@@ -150,10 +150,6 @@ public sealed class WebAssemblyHost : IAsyncDisposable
 
         manager.SetPlatformRenderMode(RenderMode.InteractiveWebAssembly);
         await manager.RestoreStateAsync(store, RestoreContext.InitialValue);
-
-        // Start hosted services
-        _hostedServiceExecutor = Services.GetRequiredService<HostedServiceExecutor>();
-        await _hostedServiceExecutor.StartAsync(cancellationToken);
 
         var tcs = new TaskCompletionSource();
         using (cancellationToken.Register(() => tcs.TrySetResult()))
@@ -216,6 +212,10 @@ public sealed class WebAssemblyHost : IAsyncDisposable
 
             await initializationTcs.Task;
             store.ExistingState.Clear();
+
+            // Start hosted services after renderer is initialized
+            _hostedServiceExecutor = Services.GetRequiredService<HostedServiceExecutor>();
+            await _hostedServiceExecutor.StartAsync(cancellationToken);
 
             await tcs.Task;
         }

