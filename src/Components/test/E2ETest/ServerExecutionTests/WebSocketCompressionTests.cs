@@ -13,7 +13,8 @@ using OpenQA.Selenium;
 using TestServer;
 using Xunit.Abstractions;
 
-namespace Microsoft.AspNetCore.Components.E2ETests.ServerExecutionTests;
+namespace Microsoft.AspNetCore.Components.E2ETests.ServerExecutionTests
+{
 
 public abstract partial class AllowedWebSocketCompressionTests(
     BrowserFixture browserFixture,
@@ -204,5 +205,6 @@ public partial class NoneAncestorWebSocketAppliesPolicyOnCallbackCompressionTest
             configuration.CspPolicy = "'none'";
         };
     }
+}
 }
 
