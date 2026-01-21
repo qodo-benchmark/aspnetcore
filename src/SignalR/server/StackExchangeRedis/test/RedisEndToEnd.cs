@@ -359,7 +359,7 @@ public class RedisEndToEndTests : VerifiableLoggedTest
         }
     }
 
-    internal sealed class WebSocketWrapper : WebSocket
+    internal class WebSocketWrapper : WebSocket
     {
         private readonly WebSocket _inner;
         private TaskCompletionSource<(WebSocketReceiveResult, ReadOnlyMemory<byte>)> _receiveTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
