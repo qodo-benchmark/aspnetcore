@@ -89,6 +89,7 @@ public class RedisEndToEndTests : VerifiableLoggedTest
     [ConditionalTheory]
     [SkipIfDockerNotPresent]
     [MemberData(nameof(TransportTypesAndProtocolTypes))]
+    [QuarantinedTest("https://github.com/dotnet/aspnetcore/issues/59991")]
     public async Task CanSendAndReceiveUserMessagesFromMultipleConnectionsWithSameUser(HttpTransportType transportType, string protocolName)
     {
         using (StartVerifiableLog())
@@ -184,6 +185,7 @@ public class RedisEndToEndTests : VerifiableLoggedTest
     [ConditionalTheory]
     [SkipIfDockerNotPresent]
     [MemberData(nameof(TransportTypesAndProtocolTypes))]
+    [QuarantinedTest("https://github.com/dotnet/aspnetcore/issues/63582")]
     public async Task CanSendAndReceiveUserMessagesUserNameWithPatternIsTreatedAsLiteral(HttpTransportType transportType, string protocolName)
     {
         using (StartVerifiableLog())
@@ -357,7 +359,7 @@ public class RedisEndToEndTests : VerifiableLoggedTest
         }
     }
 
-    internal sealed class WebSocketWrapper : WebSocket
+    internal class WebSocketWrapper : WebSocket
     {
         private readonly WebSocket _inner;
         private TaskCompletionSource<(WebSocketReceiveResult, ReadOnlyMemory<byte>)> _receiveTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
