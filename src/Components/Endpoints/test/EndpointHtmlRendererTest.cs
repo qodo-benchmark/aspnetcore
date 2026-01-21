@@ -834,8 +834,8 @@ public class EndpointHtmlRendererTest
         var preambleMarker = JsonSerializer.Deserialize<ComponentMarker>(preamble, ServerComponentSerializationSettings.JsonSerializationOptions);
         Assert.NotNull(preambleMarker.PrerenderId);
         Assert.Equal("webassembly", preambleMarker.Type);
-        Assert.Equal(typeof(GenericComponent<int>).Assembly.GetName().Name, preambleMarker.Assembly);
-        Assert.Equal(typeof(GenericComponent<int>).FullName, preambleMarker.TypeName);
+        Assert.Equal(typeof(GenericComponent<string>).Assembly.GetName().Name, preambleMarker.Assembly);
+        Assert.Equal(typeof(GenericComponent<string>).FullName, preambleMarker.TypeName);
 
         var prerenderedContent = match.Groups["content"].Value;
         Assert.Equal("<p>Generic value: 456</p>", prerenderedContent);

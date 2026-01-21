@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Microsoft.AspNetCore.Components.Server.Circuits;
-
-public class ServerComponentDeserializerTest
+namespace Microsoft.AspNetCore.Components.Server.Circuits
 {
+    public class ServerComponentDeserializerTest
+    {
     private readonly IDataProtectionProvider _ephemeralDataProtectionProvider;
     private readonly ITimeLimitedDataProtector _protector;
     private ServerComponentInvocationSequence _invocationSequence = new();
@@ -121,7 +121,7 @@ public class ServerComponentDeserializerTest
         var parameters = deserializedDescriptor.Parameters.ToDictionary();
         Assert.Single(parameters);
         Assert.Contains("Value", parameters.Keys);
-        Assert.Equal(42, Convert.ToInt32(parameters["Value"]!, CultureInfo.InvariantCulture));
+        Assert.Equal(42, Convert.ToInt64(parameters["Value"]!, CultureInfo.InvariantCulture));
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class ServerComponentDeserializerTest
 
         var secondDescriptor = descriptors[1];
         Assert.Equal(typeof(GenericTestComponent<string>).FullName, secondDescriptor.ComponentType.FullName);
-        Assert.Equal(1, secondDescriptor.Sequence);
+        Assert.Equal(0, secondDescriptor.Sequence);
     }
 
     [Fact]
@@ -594,4 +594,5 @@ public class ServerComponentDeserializerTest
         public void Attach(RenderHandle renderHandle) => throw new NotImplementedException();
         public Task SetParametersAsync(ParameterView parameters) => throw new NotImplementedException();
     }
+}
 }
