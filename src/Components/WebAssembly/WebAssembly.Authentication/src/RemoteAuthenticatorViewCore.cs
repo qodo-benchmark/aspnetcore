@@ -287,6 +287,9 @@ public partial class RemoteAuthenticatorViewCore<[DynamicallyAccessedMembers(Jso
 
         AuthenticationState.ReturnUrl = returnUrl;
 
+        // Ensure we're authenticated before proceeding with sign-out
+        await Task.Yield();
+
         var state = await AuthenticationProvider.GetAuthenticationStateAsync();
         var isauthenticated = state.User.Identity?.IsAuthenticated ?? false;
         if (isauthenticated)
