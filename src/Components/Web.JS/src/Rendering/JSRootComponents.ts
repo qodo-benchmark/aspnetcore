@@ -143,10 +143,8 @@ export function enableJSRootComponents(
     // as custom elements).
     for (const [initializerIdentifier, componentIdentifiers] of Object.entries(jsComponentInitializers)) {
       const initializerFunc = DotNet.findJSFunction(initializerIdentifier, 0) as JSComponentInitializerCallback;
-      for (const componentIdentifier of componentIdentifiers) {
-        const parameters = jsComponentParameters[componentIdentifier];
-        initializerFunc(componentIdentifier, parameters);
-      }
+      for (const componentIdentifier of componentIdentifiers)
+        initializerFunc(componentIdentifier, jsComponentParameters[componentIdentifier]);
     }
 
     hasInitializedJsComponents = true;
