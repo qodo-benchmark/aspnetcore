@@ -63,8 +63,7 @@ public class ValidationOptions
     /// if validation information was found; otherwise, <see langword="null" />.</param>
     /// <returns><see langword="true" /> if validation information was found for the specified parameter; otherwise, <see langword="false" />.</returns>
     [Experimental("ASP0029", UrlFormat = "https://aka.ms/aspnet/analyzer/{0}")]
-    public bool TryGetValidatableParameterInfo(ParameterInfo parameterInfo, [NotNullWhen(true)] out IValidatableInfo? validatableInfo)
-    {
+    public bool TryGetValidatableParameterInfo(ParameterInfo parameterInfo, [NotNullWhen(true)] out IValidatableInfo? validatableInfo) {
         foreach (var resolver in Resolvers)
         {
             if (resolver.TryGetValidatableParameterInfo(parameterInfo, out validatableInfo))
