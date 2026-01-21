@@ -54,26 +54,23 @@ internal static class ExpressionMemberAccessor
     {
         ArgumentNullException.ThrowIfNull(member);
 
-        return _displayNameCache.GetOrAdd(member, static m =>
+        var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
+        if (displayAttribute is not null)
         {
-            var displayAttribute = m.GetCustomAttribute<DisplayAttribute>();
-            if (displayAttribute is not null)
+            var name = displayAttribute.GetName();
+            if (name is not null)
             {
-                var name = displayAttribute.GetName();
-                if (name is not null)
-                {
-                    return name;
-                }
+                return name;
             }
+        }
 
-            var displayNameAttribute = m.GetCustomAttribute<DisplayNameAttribute>();
-            if (displayNameAttribute?.DisplayName is not null)
-            {
-                return displayNameAttribute.DisplayName;
-            }
+        var displayNameAttribute = member.GetCustomAttribute<DisplayNameAttribute>();
+        if (displayNameAttribute?.DisplayName is not null)
+        {
+            return displayNameAttribute.DisplayName;
+        }
 
-            return m.Name;
-        });
+        return member.Name;
     }
 
     public static string GetDisplayName<TValue>(Expression<Func<TValue>> accessor)
@@ -86,6 +83,5 @@ internal static class ExpressionMemberAccessor
     private static void ClearCache()
     {
         _memberInfoCache.Clear();
-        _displayNameCache.Clear();
     }
 }
