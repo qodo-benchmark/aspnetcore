@@ -6,61 +6,62 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace Microsoft.AspNetCore.Components.Forms;
-
-/// <summary>
-/// Displays the display name for a specified field, reading from <see cref="DisplayAttribute"/>
-/// or <see cref="DisplayNameAttribute"/> if present, or falling back to the property name.
-/// </summary>
-/// <typeparam name="TValue">The type of the field.</typeparam>
-public class DisplayName<TValue> : IComponent
+namespace Microsoft.AspNetCore.Components.Forms
 {
-
-    private RenderHandle _renderHandle;
-    private Expression<Func<TValue>>? _previousFieldAccessor;
-    private string? _displayName;
-
     /// <summary>
-    /// Specifies the field for which the display name should be shown.
+    /// Displays the display name for a specified field, reading from <see cref="DisplayAttribute"/>
+    /// or <see cref="DisplayNameAttribute"/> if present, or falling back to the property name.
     /// </summary>
-    [Parameter, EditorRequired]
-    public Expression<Func<TValue>>? For { get; set; }
-    /// <inheritdoc />
-    void IComponent.Attach(RenderHandle renderHandle)
+    /// <typeparam name="TValue">The type of the field.</typeparam>
+    public class DisplayName<TValue> : IComponent
     {
-        _renderHandle = renderHandle;
-    }
 
-    /// <inheritdoc />
-    Task IComponent.SetParametersAsync(ParameterView parameters)
-    {
-        parameters.SetParameterProperties(this);
+        private RenderHandle _renderHandle;
+        private Expression<Func<TValue>>? _previousFieldAccessor;
+        private string? _displayName;
 
-        if (For is null)
+        /// <summary>
+        /// Specifies the field for which the display name should be shown.
+        /// </summary>
+        [Parameter, EditorRequired]
+        public Expression<Func<TValue>>? For { get; set; }
+        /// <inheritdoc />
+        void IComponent.Attach(RenderHandle renderHandle)
         {
-            throw new InvalidOperationException($"{GetType()} requires a value for the " +
-                $"{nameof(For)} parameter.");
+            _renderHandle = renderHandle;
         }
 
-        // Only recalculate if the expression changed
-        if (For != _previousFieldAccessor)
+        /// <inheritdoc />
+        Task IComponent.SetParametersAsync(ParameterView parameters)
         {
-            var newDisplayName = ExpressionMemberAccessor.GetDisplayName(For);
+            parameters.SetParameterProperties(this);
 
-            if (newDisplayName != _displayName)
+            if (For is null)
             {
-                _displayName = newDisplayName;
-                _renderHandle.Render(BuildRenderTree);
+                throw new InvalidOperationException($"{GetType()} requires a value for the " +
+                    $"{nameof(For)} parameter.");
             }
 
-            _previousFieldAccessor = For;
+            // Only recalculate if the expression changed
+            if (For != _previousFieldAccessor)
+            {
+                var newDisplayName = ExpressionMemberAccessor.GetDisplayName(For);
+
+                if (newDisplayName != _displayName)
+                {
+                    _displayName = newDisplayName;
+                    _renderHandle.Render(BuildRenderTree);
+                }
+
+                _previousFieldAccessor = For;
+            }
+
+            return Task.CompletedTask;
         }
 
-        return Task.CompletedTask;
-    }
-
-    private void BuildRenderTree(RenderTreeBuilder builder)
-    {
-        builder.AddContent(0, _displayName);
+        private void BuildRenderTree(RenderTreeBuilder builder)
+        {
+            builder.AddContent(0, _displayName);
+        }
     }
 }
